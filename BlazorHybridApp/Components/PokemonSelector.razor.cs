@@ -21,8 +21,11 @@ public partial class PokemonSelector
 
     public void Clear()
     {
-        // CS0123 No overload for 'Search' matches
-        // delegate 'Func<string, CancellationToken, Task<IEnumerable<PokemonInfo>>>'
+        //  CS1061	'MudAutocomplete<PokemonInfo>' does not contain a
+        //   definition for 'Clear' and no accessible extension
+        //   method 'Clear' accepting a first argument of type
+        //   'MudAutocomplete<PokemonInfo>' could be found
+        //   (are you missing a using directive or an assembly reference?)
         //_selectedPokemon.Clear();
         _selectedPokemon.ClearAsync().GetAwaiter().GetResult();
     }
@@ -32,24 +35,20 @@ public partial class PokemonSelector
         await GetPokemonListAsync();
     }
 
-    //  CS1061	'MudAutocomplete<PokemonInfo>' does not contain a
-    //   definition for 'Clear' and no accessible extension
-    //   method 'Clear' accepting a first argument of type
-    //   'MudAutocomplete<PokemonInfo>' could be found
-    //   (are you missing a using directive or an assembly reference?)
-    //   
+    // CS0123 No overload for 'Search' matches
+    // delegate 'Func<string, CancellationToken, Task<IEnumerable<PokemonInfo>>>'    
     //private Task<IEnumerable<PokemonInfo>?> Search(string value)
     // https://stackoverflow.com/questions/78591389/no-overload-for-search1-matches-delegate-funcstring-cancellationtoken-task
     private Task<IEnumerable<PokemonInfo>?> Search(
                 string value, 
                 CancellationToken token)
-{
-    // if text is null or empty, show complete list
+    {
+        // if text is null or empty, show complete list
         if (string.IsNullOrEmpty(value))
         return Task.FromResult(_pokemon?.Take(10));
-    return Task.FromResult(_pokemon?
-    .Where(pokemon => pokemon.Name.Contains(value, StringComparison.InvariantCultureIgnoreCase))
-    .Take(10));
+        return Task.FromResult(_pokemon?
+         .Where(pokemon => pokemon.Name.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+        .Take(10));
     }
 
     protected async Task GetPokemonListAsync()
